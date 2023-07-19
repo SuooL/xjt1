@@ -52,6 +52,4 @@ model = base_clf.fit(x_bsm, y_bsm)
 
 print(model.score(X_test, y_test))
 
-pickle.dump(model,open("clf.dat","wb"))
-
 joblib.dump(model, 'model.pkl')

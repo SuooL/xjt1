@@ -7,7 +7,7 @@
 import numpy as np
 import streamlit as st
 import pandas as pd
-import pickle
+import joblib
 
 st.header("Hemodynamic Deterioration App for moderate-risk PE in ICU")
 st.write("This is a web APP for identifying patients with moderate-risk pulmonary embolism who are predisposed to hemodynamic deterioration in the ICU.")
@@ -48,12 +48,14 @@ urine_output=st.sidebar.slider(label = 'urine_output', min_value = 0.0,
 if st.button("Submit"):
     
     # Unpickle classifier
-    clf = pickle.load(open("clf.dat","rb"))
+    clf = joblib.load(open("model.pkl", "rb"))
     
     # Store inputs into dataframe
     X = pd.DataFrame([[invasive_line,hypertension_disease, aki_stages,sbp_max,mbp_mean,bicarbonate_min,dbp_mean,temperature_mean,aniongap_max,urine_output]], 
                      columns = ['invasive_line','hypertension_disease', 'aki_stages','sbp_max','mbp_mean','bicarbonate_min','dbp_mean','temperature_mean','aniongap_max','urine_output'])
+    
     X[['invasive_line', 'hypertension_disease','aki_stages']] = X[['invasive_line', 'hypertension_disease','aki_stages']].astype('int64')
+    print(X)
     # Get prediction
     prediction = clf.predict(X)[0]
     
